@@ -12,6 +12,10 @@
 
 #include "Kismet/GameplayStatics.h"
 
+//Online Connection
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineSessionInterface.h"
+
 //////////////////////////////////////////////////////////////////////////
 // AMPTestingCharacter
 
@@ -50,6 +54,20 @@ AMPTestingCharacter::AMPTestingCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	//Online Subsystem
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if (OnlineSubsystem)
+	{
+		//access th session interface
+		OnlineSssionInterface = OnlineSubsystem->GetSessionInterface();
+
+		if (GEngine)
+		{
+			//print a screen message for onlyne subystm information
+			GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Blue,FString::Printf(TEXT("Found Subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
+		}
+	}
 }
 
 void AMPTestingCharacter::BeginPlay()

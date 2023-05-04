@@ -46,11 +46,11 @@ SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
-Binaries/*
+MPTesting/Binaries
 Plugins/*/Binaries/*
 
 # Builds
-Build/*
+MPTesting/Build/
 
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
 !Build/*/
@@ -74,3 +74,4 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+MPTesting/Binaries/Win64/UnrealEditor-MPTesting.pdb

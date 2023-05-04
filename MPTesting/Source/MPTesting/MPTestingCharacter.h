@@ -64,6 +64,14 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 
+	//Online Base function
+public:
+
+	//Pointer to the online session Interface
+	// in this way we can avoid using the hader but we'll need the inlude there
+	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSssionInterface;
+
+#pragma region Lan Connection function
 	UFUNCTION(BlueprintCallable)
 		void OpenLobby();
 
@@ -72,5 +80,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void CallClientTravel(const FString& Address);
+#pragma endregion
+
+
 };
 
