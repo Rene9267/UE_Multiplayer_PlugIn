@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "MPTestingCharacter.generated.h"
 
+#include "Interfaces/OnlineSessionInterface.h"
+
+#include "MPTestingCharacter.generated.h"
 
 UCLASS(config = Game)
 class AMPTestingCharacter : public ACharacter
@@ -68,8 +70,11 @@ public:
 public:
 
 	//Pointer to the online session Interface
+	IOnlineSessionPtr OnlineSssionInterface;
+
 	// in this way we can avoid using the hader but we'll need the inlude there
-	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSssionInterface;
+	//TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSssionInterface;
+
 
 #pragma region Lan Connection function
 	UFUNCTION(BlueprintCallable)
@@ -82,6 +87,18 @@ public:
 		void CallClientTravel(const FString& Address);
 #pragma endregion
 
+protected:
 
+	//all session create logic
+	UFUNCTION(BlueprintCallable)
+		void CreateGameSession();
+
+	//Callback Function for the delegate
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+
+private:
+	//delegate creation
+	//delegate variable creation
+	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
 };
 

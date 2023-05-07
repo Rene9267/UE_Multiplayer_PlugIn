@@ -14,12 +14,13 @@
 
 //Online Connection
 #include "OnlineSubsystem.h"
-#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AMPTestingCharacter
 
-AMPTestingCharacter::AMPTestingCharacter()
+AMPTestingCharacter::AMPTestingCharacter() :
+	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete))
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -65,7 +66,7 @@ AMPTestingCharacter::AMPTestingCharacter()
 		if (GEngine)
 		{
 			//print a screen message for onlyne subystm information
-			GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Blue,FString::Printf(TEXT("Found Subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Found Subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
 		}
 	}
 }
@@ -108,6 +109,60 @@ void AMPTestingCharacter::CallClientTravel(const FString& Address)
 	if (PlayerController)
 	{
 		PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	}
+}
+
+void AMPTestingCharacter::CreateGameSession()
+{
+	//called when pressing the 1 key
+	//check if the pointer is valid
+	if (!OnlineSssionInterface.IsValid())
+	{
+		return;
+	}
+	//check to see if a session alrady exist
+	auto ExistingSession = OnlineSssionInterface->GetNamedSession(NAME_GameSession /*global variable*/);
+	//if already exist destroy the session so we can generate a new one
+	if (ExistingSession != nullptr)
+	{
+		OnlineSssionInterface->DestroySession(NAME_GameSession);
+	}
+
+	OnlineSssionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
+
+	TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings);
+	SessionSettings->bIsLANMatch = false;
+	//number player that can connect
+	SessionSettings->NumPublicConnections = 4;
+	//if session is running other player can join 
+	SessionSettings->bAllowJoinInProgress = true;
+	//search from region player
+	SessionSettings->bAllowJoinViaPresence = true;
+	//allows steam to advertise so other player can find and join
+	SessionSettings->bShouldAdvertise = true;
+	//find session going on in our region of the world
+	SessionSettings->bUsesPresence = true;
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+	OnlineSssionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings);
+}
+
+void AMPTestingCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	if (bWasSuccessful)
+	{
+		if (GEngine)
+		{
+			//print a screen message if success create session
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Create session %s"), *SessionName.ToString()));
+		}
+	}
+	else
+	{
+		if (GEngine)
+		{
+			//print a screen message if fail create session
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Failed to create session!")));
+		}
 	}
 }
 
