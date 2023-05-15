@@ -93,12 +93,26 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void CreateGameSession();
 
+	UFUNCTION(BlueprintCallable)
+		void JoinGameSession();
+
+#pragma region Callback Function
 	//Callback Function for the delegate
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+
+	//callback for find session
+	//this'll reflect the success or not for the find 
+	//called in response to the delegate sent by the session interface once complete find the session
+	void OnFindSessionComplete(bool bWasSuccessful);    
+#pragma endregion
 
 private:
 	//delegate creation
 	//delegate variable creation
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
+	//delegate for find session
+	FOnFindSessionsCompleteDelegate FindSessionCompleteDelegate;
+
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
 

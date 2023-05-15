@@ -20,7 +20,8 @@
 // AMPTestingCharacter
 
 AMPTestingCharacter::AMPTestingCharacter() :
-	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete))
+	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete)), //deleate for the session creation
+	FindSessionCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateUObject(this, &ThisClass::OnFindSessionComplete)) //deleate for finding the session complete
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -121,7 +122,7 @@ void AMPTestingCharacter::CreateGameSession()
 		return;
 	}
 	//check to see if a session alrady exist
-	auto ExistingSession = OnlineSssionInterface->GetNamedSession(NAME_GameSession /*global variable*/);
+	FNamedOnlineSession* ExistingSession = OnlineSssionInterface->GetNamedSession(NAME_GameSession /*global variable*/);
 	//if already exist destroy the session so we can generate a new one
 	if (ExistingSession != nullptr)
 	{
@@ -146,6 +147,27 @@ void AMPTestingCharacter::CreateGameSession()
 	OnlineSssionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings);
 }
 
+void AMPTestingCharacter::JoinGameSession()
+{
+	//find game session
+	if (!OnlineSssionInterface.IsValid())
+	{
+		return;
+	}
+
+	//add the delegate to the delegate list
+	OnlineSssionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionCompleteDelegate);
+
+	//create a pointer we use a shared pointer and not a ref because we plan on making there varibales on this class to access information
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	//settings session
+	SessionSearch->MaxSearchResults = 10000; //hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
+	SessionSearch->bIsLanQuery = false; // for lan using
+	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE,true,EOnlineComparisonOp::Equals); //query to use for finding matching servers
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the net id
+	OnlineSssionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), SessionSearch.ToSharedRef());
+}
+
 void AMPTestingCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
 {
 	if (bWasSuccessful)
@@ -162,6 +184,19 @@ void AMPTestingCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSu
 		{
 			//print a screen message if fail create session
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Failed to create session!")));
+		}
+	}
+}
+
+void AMPTestingCharacter::OnFindSessionComplete(bool bWasSuccessful)
+{
+	for (FOnlineSessionSearchResult Result : SessionSearch->SearchResults)
+	{
+		FString ID = Result.GetSessionIdStr();
+		FString User = Result.Session.OwningUserName;
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, FString::Printf(TEXT("ID: %s, User: %s"), *ID, *User));
 		}
 	}
 }
