@@ -21,7 +21,8 @@
 
 AMPTestingCharacter::AMPTestingCharacter() :
 	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete)), //deleate for the session creation
-	FindSessionCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateUObject(this, &ThisClass::OnFindSessionComplete)) //deleate for finding the session complete
+	FindSessionCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateUObject(this, &ThisClass::OnFindSessionComplete)), //deleate for finding the session complete
+	JoinSessionCompleteDelegate(FOnJoinSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnJoinSessionComplete))
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -143,6 +144,11 @@ void AMPTestingCharacter::CreateGameSession()
 	SessionSettings->bShouldAdvertise = true;
 	//find session going on in our region of the world
 	SessionSettings->bUsesPresence = true;
+	SessionSettings->bUseLobbiesIfAvailable = true;
+	//usefull for chech the type when join. so we'r sure to join only in sessions with the correct match type
+	SessionSettings->Set(FName("MatchType"), FString("FreeForAll"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 	OnlineSssionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings);
 }
@@ -163,7 +169,7 @@ void AMPTestingCharacter::JoinGameSession()
 	//settings session
 	SessionSearch->MaxSearchResults = 10000; //hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
 	SessionSearch->bIsLanQuery = false; // for lan using
-	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE,true,EOnlineComparisonOp::Equals); //query to use for finding matching servers
+	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals); //query to use for finding matching servers
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the net id
 	OnlineSssionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), SessionSearch.ToSharedRef());
 }
@@ -172,17 +178,30 @@ void AMPTestingCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSu
 {
 	if (bWasSuccessful)
 	{
+		//print a screen message if success create session
 		if (GEngine)
 		{
-			//print a screen message if success create session
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Create session %s"), *SessionName.ToString()));
+		}
+		//travel in the server world
+		UWorld* CurrentWorld = GetWorld();
+		if (CurrentWorld)
+		{
+			if (CurrentWorld->ServerTravel(FString("/Game/ThirdPerson/Maps/LobbyMap?listen")))//?listen => open the level as listen server
+			{
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Enter in this map: %s"), *CurrentWorld->GetFName().ToString()));
+				}
+			}
+
 		}
 	}
 	else
 	{
+		//print a screen message if fail create session
 		if (GEngine)
 		{
-			//print a screen message if fail create session
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Failed to create session!")));
 		}
 	}
@@ -190,14 +209,58 @@ void AMPTestingCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSu
 
 void AMPTestingCharacter::OnFindSessionComplete(bool bWasSuccessful)
 {
+	if (!OnlineSssionInterface.IsValid())
+	{
+		return;
+	}
+
 	for (FOnlineSessionSearchResult Result : SessionSearch->SearchResults)
 	{
 		FString ID = Result.GetSessionIdStr();
 		FString User = Result.Session.OwningUserName;
+
+		FString MatchType;
+		Result.Session.SessionSettings.Get(FName("MatchType"), MatchType); //if the session have the correct FName he'll set the Match Type value
+
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, FString::Printf(TEXT("ID: %s, User: %s"), *ID, *User));
 		}
+
+		//check if MatchType is correct
+		if (MatchType == FString("FreeForAll"))
+		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, FString::Printf(TEXT("Jopin Match Type: %s"), *MatchType));
+			}
+			OnlineSssionInterface->AddOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegate);
+			const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the net id
+			OnlineSssionInterface->JoinSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, Result);
+		}
+	}
+}
+
+//called when join complete
+void AMPTestingCharacter::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	if (!OnlineSssionInterface.IsValid())
+	{
+		return;
+	}
+
+	//Get the IP address
+	FString Address;
+	bool ConnectionResolved = OnlineSssionInterface->GetResolvedConnectString(NAME_GameSession, Address);// the address'll be automatically filled
+	if (ConnectionResolved)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, FString::Printf(TEXT("Connect string: %s"), *Address));
+	}
+
+	APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
+	if (PlayerController)
+	{
+		PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 	}
 }
 

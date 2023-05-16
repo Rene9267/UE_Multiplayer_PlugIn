@@ -103,15 +103,22 @@ protected:
 	//callback for find session
 	//this'll reflect the success or not for the find 
 	//called in response to the delegate sent by the session interface once complete find the session
-	void OnFindSessionComplete(bool bWasSuccessful);    
+	void OnFindSessionComplete(bool bWasSuccessful);
+
+	//callback for joining the session
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result); //will be passed the session name and the status of the join for inform us if we join the session or not
 #pragma endregion
 
 private:
-	//delegate creation
+
+#pragma region Delegates
 	//delegate variable creation
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
 	//delegate for find session
 	FOnFindSessionsCompleteDelegate FindSessionCompleteDelegate;
+	FOnJoinSessionCompleteDelegate JoinSessionCompleteDelegate;
+#pragma endregion
+
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
