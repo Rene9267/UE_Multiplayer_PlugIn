@@ -5,6 +5,8 @@
 #include "Components/Button.h"
 #include "MultiplayerSessionSubsystem.h"
 
+
+
 void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch)
 {
 	NumConnection = NumConnections;
@@ -41,6 +43,12 @@ void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch)
 	{
 		//every time we broadcast that delegate the callback OnCreateSession'll response
 		MultiplayerSessionSubsystem->MultiplayerOnCreateSessionComplete.AddDynamic(this, &ThisClass::OnCreateSession);
+		MultiplayerSessionSubsystem->MultiplayerOnStartSessionComplete.AddDynamic(this, &ThisClass::OnStartSession);
+		MultiplayerSessionSubsystem->MultiplayerOnDestroySessionComplete.AddDynamic(this, &ThisClass::OnDestroySession);
+
+		MultiplayerSessionSubsystem->MultiplayerOnFindSessionComplete.AddUObject(this, &ThisClass::OnFindSession);
+		MultiplayerSessionSubsystem->MultiplayerOnJoinSessionComplete.AddUObject(this, &ThisClass::OnJoinSession);
+
 	}
 }
 
@@ -96,13 +104,28 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 	}
 }
 
+void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& SessionResult, bool bWasSuccesful)
+{
+}
+
+void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
+{
+}
+
+void UMultiplayerMenu::OnDestroySession(bool bWasSuccesful)
+{
+}
+
+void UMultiplayerMenu::OnStartSession(bool bWasSuccesful)
+{
+}
+
 void UMultiplayerMenu::HostButtonClicked()
 {
 	//Call MultiplayerSessionSubsystem Functions
 	if (MultiplayerSessionSubsystem)
 	{
 		MultiplayerSessionSubsystem->CreateSession(NumConnection, MatchType);
-
 	}
 }
 

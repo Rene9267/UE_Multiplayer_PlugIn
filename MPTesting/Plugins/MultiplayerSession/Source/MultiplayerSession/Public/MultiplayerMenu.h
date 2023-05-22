@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MultiplayerMenu.generated.h"
+#include "OnlineSessionSettings.h"
+#include "Interfaces/OnlineSessionInterface.h"
 
+#include "MultiplayerMenu.generated.h"
 /**
  *
  */
@@ -47,7 +49,14 @@ protected:
 
 	//Callbacks for custom delegate on the multiplayer Session Subsystem
 	UFUNCTION()
-	void OnCreateSession(bool bWasSuccesful);
+		void OnCreateSession(bool bWasSuccesful);
+	UFUNCTION()
+		void OnDestroySession(bool bWasSuccesful);
+	UFUNCTION()
+		void OnStartSession(bool bWasSuccesful);
+
+	void OnFindSession(const TArray<FOnlineSessionSearchResult>& SessionResult, bool bWasSuccesful);
+	void OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt);
 
 
 private:

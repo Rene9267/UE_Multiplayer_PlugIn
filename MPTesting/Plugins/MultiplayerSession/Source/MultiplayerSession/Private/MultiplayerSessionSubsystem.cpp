@@ -47,7 +47,7 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	LastSessionSettings->bAllowJoinViaPresence = true;					//search from region player
 	LastSessionSettings->bShouldAdvertise = true;						//allows steam to advertise so other player can find and join
 	LastSessionSettings->bUsesPresence = true;							//find session going on in our region of the world
-	//LastSessionSettings->bUseLobbiesIfAvailable = true
+	LastSessionSettings->bUseLobbiesIfAvailable = true;
 
 	//usefull for chech the type when join. so we'r sure to join only in sessions with the correct match type
 	LastSessionSettings->Set(FName("MatchType"), MatchType, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
