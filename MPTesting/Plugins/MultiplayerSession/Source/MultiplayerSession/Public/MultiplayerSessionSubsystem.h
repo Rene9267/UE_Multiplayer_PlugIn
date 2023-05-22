@@ -42,6 +42,7 @@ private:
 
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
+	TSharedPtr<FOnlineSessionSearch> LastSessionSearch;
 
 	//Delegates, we'll bind our multilayer seession susbsystem internal callbacks to these
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;

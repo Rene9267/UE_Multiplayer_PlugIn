@@ -4,6 +4,7 @@
 #include "MultiplayerMenu.h"
 #include "Components/Button.h"
 #include "MultiplayerSessionSubsystem.h"
+#include "OnlineSubsystem.h"
 
 
 
@@ -106,10 +107,44 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 
 void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& SessionResult, bool bWasSuccesful)
 {
+	if (MultiplayerSessionSubsystem == nullptr)
+	{
+		return;
+	}
+	//check trow the array if there is a valid session
+	for (FOnlineSessionSearchResult Result : SessionResult)
+	{
+		FString MatchSettingValue;
+		Result.Session.SessionSettings.Get(FName("MatchType"), MatchSettingValue); //if the session have the correct FName he'll set the Match Type value
+		if (MatchSettingValue.Compare(MatchType))
+		{
+			//call join session for joining
+			MultiplayerSessionSubsystem->JoinSession(Result);
+			return;
+		}
+	}
 }
 
 void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
 {
+	//Get the IP address
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
+		if (SessionInterface.IsValid())
+		{
+			FString Address;
+			bool ConnectionResolved = SessionInterface->GetResolvedConnectString(NAME_GameSession, Address);// the address'll be automatically filled
+
+			//very important to take from the game instance because in the Menu we dont have other way yo access the player controller
+			APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
+			if (PlayerController)
+			{
+				PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+			}
+		}
+	}
 }
 
 void UMultiplayerMenu::OnDestroySession(bool bWasSuccesful)
@@ -131,9 +166,9 @@ void UMultiplayerMenu::HostButtonClicked()
 
 void UMultiplayerMenu::JoinButtonClicked()
 {
-	if (GEngine)
+	if (MultiplayerSessionSubsystem)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Join Button Clicked")));
+		MultiplayerSessionSubsystem->FindSession(MaxSessionResult);
 	}
 }
 

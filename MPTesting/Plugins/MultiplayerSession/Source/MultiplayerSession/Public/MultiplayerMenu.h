@@ -19,10 +19,10 @@ class MULTIPLAYERSESSION_API UMultiplayerMenu : public UUserWidget
 #pragma region Variables
 private:
 	//this is used for link the button widget to our button variable in c++ the variable has to have the exact same name of the button
-	UPROPERTY(meta = (BindWidjet))
+	UPROPERTY(meta = (BindWidget))
 		class UButton* HostButton;
-	UPROPERTY(meta = (BindWidjet))
-		UButton* JoinButton;
+	UPROPERTY(meta = (BindWidget))
+		class UButton* JoinButton;
 
 	//the susbsystem designed to handle all online session
 	class UMultiplayerSessionSubsystem* MultiplayerSessionSubsystem;
@@ -30,7 +30,7 @@ private:
 	int32 NumConnection{ 4 };
 	FString MatchType{ TEXT("FreeForAll") };
 	FString LobbyPath{ TEXT("/Game/ThirdPerson/Maps/LobbyMap?listen") };
-
+	int32 MaxSessionResult{ 10000 };	//Better use a very hight value
 #pragma endregion
 
 

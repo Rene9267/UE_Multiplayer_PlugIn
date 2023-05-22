@@ -63,7 +63,9 @@
             "c:\\programmi vari\\ue_5.1\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\uht\\contentwidget.generated.h",
             "c:\\programmi vari\\ue_5.1\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\uht\\button.generated.h",
             "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\source\\multiplayersession\\public\\multiplayersessionsubsystem.h",
-            "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersessionsubsystem.generated.h"
+            "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersessionsubsystem.generated.h",
+            "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinesubsystem.h",
+            "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinesubsystemmodule.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []
