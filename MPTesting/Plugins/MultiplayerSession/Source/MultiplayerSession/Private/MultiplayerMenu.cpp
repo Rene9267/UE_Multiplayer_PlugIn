@@ -15,12 +15,12 @@ void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch)
 	SetVisibility(ESlateVisibility::Visible);
 	bIsFocusable = true;
 	UWorld* World = GetWorld();
+	//for setting input mode on UI
 	if (World)
 	{
 		APlayerController* PlayerController = World->GetFirstPlayerController();
 		if (PlayerController)
 		{
-			//for setting input mode on UI
 			FInputModeUIOnly InputModeData;
 			InputModeData.SetWidgetToFocus(TakeWidget()); //this'll take the current widget and set the focus
 			InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); //for lock the mouse
@@ -34,9 +34,14 @@ void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch)
 	if (GameInstance)
 	{
 		MultiplayerSessionSubsystem = GameInstance->GetSubsystem<UMultiplayerSessionSubsystem>();
-
 	}
 
+	//Bind the callback for the delegate
+	if (MultiplayerSessionSubsystem)
+	{
+		//every time we broadcast that delegate the callback OnCreateSession'll response
+		MultiplayerSessionSubsystem->MultiplayerOnCreateSessionComplete.AddDynamic(this, &ThisClass::OnCreateSession);
+	}
 }
 
 bool UMultiplayerMenu::Initialize()
@@ -67,23 +72,37 @@ void UMultiplayerMenu::NativeDestruct()
 	Super::NativeDestruct();
 }
 
-void UMultiplayerMenu::HostButtonClicked()
+void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 {
-	if (GEngine)
+	if (bWasSuccesful)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Host Button Clicked")));
-	}
-
-	//Call MultiplayerSessionSubsystem Functions
-	if (MultiplayerSessionSubsystem)
-	{
-		MultiplayerSessionSubsystem->CreateSession(NumConnection, MatchType);
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Session Created Successfully")));
+		}
 		//if all ok we can travel to the lobby level
 		UWorld* World = GetWorld();
 		if (World)
 		{
 			World->ServerTravel(LobbyPath);
 		}
+	}
+	else
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString(TEXT("FAIL TO CREATE")));
+		}
+	}
+}
+
+void UMultiplayerMenu::HostButtonClicked()
+{
+	//Call MultiplayerSessionSubsystem Functions
+	if (MultiplayerSessionSubsystem)
+	{
+		MultiplayerSessionSubsystem->CreateSession(NumConnection, MatchType);
+
 	}
 }
 

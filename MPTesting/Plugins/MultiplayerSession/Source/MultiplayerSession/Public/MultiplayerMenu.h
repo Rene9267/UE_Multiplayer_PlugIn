@@ -45,6 +45,11 @@ protected:
 	//called by user widget when we travel to another level
 	virtual void NativeDestruct() override;
 
+	//Callbacks for custom delegate on the multiplayer Session Subsystem
+	UFUNCTION()
+	void OnCreateSession(bool bWasSuccesful);
+
+
 private:
 	//because this is bind to ad on click event or delegate that exit in new button class we have to use UFUNCTION
 	UFUNCTION()

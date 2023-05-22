@@ -9,6 +9,11 @@
 
 #include "MultiplayerSessionSubsystem.generated.h"
 
+//Delegate for the menu class to bind callbacks
+//The multicast means that once casted multiple classes can bind to him
+//Dynamic means the delegate can be serialized and saved or loaded from a blueprint graph (Event Dispatchers)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnCreateSessionComplete, bool, bWasSuccessful);
+
 /**
  *
  */
@@ -18,7 +23,13 @@ class MULTIPLAYERSESSION_API UMultiplayerSessionSubsystem : public UGameInstance
 	GENERATED_BODY()
 
 #pragma region Variables
+public:
+
+	//CustomDelegate for Menu class
+	FMultiplayerOnCreateSessionComplete MultiplayerOnCreateSessionComplete;
+
 private:
+
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
 
@@ -37,6 +48,7 @@ private:
 
 	FOnStartSessionCompleteDelegate StartSessionCompleteDelegate;
 	FDelegateHandle StartSessionCompleteDelegateHandle;
+
 #pragma endregion
 
 
