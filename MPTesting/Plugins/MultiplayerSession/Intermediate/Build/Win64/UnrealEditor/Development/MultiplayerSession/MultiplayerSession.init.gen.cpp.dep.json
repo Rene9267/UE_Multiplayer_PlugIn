@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersession.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\intermediate\\build\\win64\\mptestingeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\development\\multiplayersession\\definitions.multiplayersession.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

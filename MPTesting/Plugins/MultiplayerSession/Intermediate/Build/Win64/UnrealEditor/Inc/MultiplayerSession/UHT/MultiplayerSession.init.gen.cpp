@@ -17,13 +17,13 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerSession_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x6723745C,
-				0xC6D6962F,
+				0xCC977478,
+				0x2CECC024,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_MultiplayerSession.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_MultiplayerSession.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_MultiplayerSession(Z_Construct_UPackage__Script_MultiplayerSession, TEXT("/Script/MultiplayerSession"), Z_Registration_Info_UPackage__Script_MultiplayerSession, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x6723745C, 0xC6D6962F));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_MultiplayerSession(Z_Construct_UPackage__Script_MultiplayerSession, TEXT("/Script/MultiplayerSession"), Z_Registration_Info_UPackage__Script_MultiplayerSession, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xCC977478, 0x2CECC024));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
