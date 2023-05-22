@@ -17,26 +17,10 @@ class MULTIPLAYERSESSION_API UMultiplayerSessionSubsystem : public UGameInstance
 {
 	GENERATED_BODY()
 
-public:
-	UMultiplayerSessionSubsystem(); //default constructor
-	// to handle session functionality, the menu class can call these
-	void CreateSession(int32 NumPublicConnections, FString MatchType); //wanna pass the number of player (NumPublic..)
-	void FindSession(int32 MaxSearchResults);
-	void JoinSession(const FOnlineSessionSearchResult& SessionResult);
-	void DestroySession();
-	void StartSession();
-
-protected:
-	//Internal callbacks for the deleggate we'll add to the online session interface delegate list, don't need to be called outside this class.
-	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
-	void OnFindSessionComplete(bool bWasSuccessful);
-	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
-	void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
-
-
+#pragma region Variables
 private:
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
 
 	//Delegates, we'll bind our multilayer seession susbsystem internal callbacks to these
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
@@ -53,5 +37,27 @@ private:
 
 	FOnStartSessionCompleteDelegate StartSessionCompleteDelegate;
 	FDelegateHandle StartSessionCompleteDelegateHandle;
+#pragma endregion
+
+
+#pragma region Functions
+public:
+	UMultiplayerSessionSubsystem(); //default constructor
+	// to handle session functionality, the menu class can call these
+	void CreateSession(int32 NumPublicConnections, FString MatchType); //wanna pass the number of player (NumPublic..)
+	void FindSession(int32 MaxSearchResults);
+	void JoinSession(const FOnlineSessionSearchResult& SessionResult);
+	void DestroySession();
+	void StartSession();
+
+protected:
+	//Internal callbacks for the deleggate we'll add to the online session interface delegate list, don't need to be called outside this class.
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionComplete(bool bWasSuccessful);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
+#pragma endregion
+
 
 };
