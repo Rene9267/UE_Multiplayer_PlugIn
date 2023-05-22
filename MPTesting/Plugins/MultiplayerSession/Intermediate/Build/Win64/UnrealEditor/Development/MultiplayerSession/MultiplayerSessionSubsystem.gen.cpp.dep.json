@@ -1,7 +1,7 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\source\\multiplayersession\\private\\multiplayersessionsubsystem.cpp",
+        "Source": "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersessionsubsystem.gen.cpp",
         "ProvidedModule": "",
         "PCH": "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\intermediate\\build\\win64\\mptestingeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
         "Includes": [
@@ -16,9 +16,7 @@
             "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\interfaces\\onlinesessiondelegates.h",
             "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinekeyvaluepair.h",
             "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinesubsystempackage.h",
-            "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersessionsubsystem.generated.h",
-            "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinesubsystem.h",
-            "c:\\programmi vari\\ue_5.1\\engine\\plugins\\online\\onlinesubsystem\\source\\public\\onlinesubsystemmodule.h"
+            "c:\\users\\rene\\desktop\\ue_multiplayer_plugin\\mptesting\\plugins\\multiplayersession\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayersession\\uht\\multiplayersessionsubsystem.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

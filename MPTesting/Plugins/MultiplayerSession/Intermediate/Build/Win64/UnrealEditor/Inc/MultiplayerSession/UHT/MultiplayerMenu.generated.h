@@ -17,11 +17,15 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_15_SPARSE_DATA
 #define FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_15_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execJoinButtonClicked); \
+	DECLARE_FUNCTION(execHostButtonClicked); \
 	DECLARE_FUNCTION(execMenuSetUp);
 
 
 #define FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execJoinButtonClicked); \
+	DECLARE_FUNCTION(execHostButtonClicked); \
 	DECLARE_FUNCTION(execMenuSetUp);
 
 
