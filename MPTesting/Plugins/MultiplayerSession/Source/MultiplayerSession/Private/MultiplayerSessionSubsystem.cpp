@@ -52,7 +52,7 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 
 	//Set some SessionSetting for the Session Creation
 	LastSessionSettings = MakeShareable(new FOnlineSessionSettings());
-	LastSessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName().Compare(TEXT("NULL")) ? true : false; // this'll return null if we'r useing null subsystem or steam if we'r using steam subsystem
+	LastSessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false; // this'll return null if we'r useing null subsystem or steam if we'r using steam subsystem
 	LastSessionSettings->NumPublicConnections = NumPublicConnections;	//number player that can connect
 	LastSessionSettings->bAllowJoinInProgress = true;					//if session is running other player can join 
 	LastSessionSettings->bAllowJoinViaPresence = true;					//search from region player
@@ -61,7 +61,7 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	LastSessionSettings->bUseLobbiesIfAvailable = true;
 	LastSessionSettings->BuildUniqueId = 1;								//We can have multiple user launching their own builds and hosting otherwise we'll join in the first one session hosted
 	LastSessionSettings->Set(FName("MatchType"), MatchType, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing); //usefull for chech the type when join. so we'r sure to join only in sessions with the correct match type
-	/*FString("FreeForAll")*/
+
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 	//if the creation of the session didnt work, remember to unbind the delegate
@@ -97,8 +97,8 @@ void UMultiplayerSessionSubsystem::FindSession(int32 MaxSearchResults)
 
 	//create a pointer we use a shared pointer and not a ref because we plan on making there varibales on this class to access information
 	LastSessionSearch = MakeShareable(new FOnlineSessionSearch());
-	LastSessionSearch->MaxSearchResults = 10000/*MaxSearchResults*/;		//hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
-	LastSessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName().Compare(TEXT("NULL")) ? true : false;		// for lan using
+	LastSessionSearch->MaxSearchResults = MaxSearchResults;		//hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
+	LastSessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;		// for lan using
 	LastSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals); //query to use for finding matching servers
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the net id
