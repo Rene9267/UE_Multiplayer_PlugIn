@@ -60,6 +60,10 @@ private:
 	FOnStartSessionCompleteDelegate StartSessionCompleteDelegate;
 	FDelegateHandle StartSessionCompleteDelegateHandle;
 
+	//check this when a session has been destroyes, if true we'll create a new session
+	bool bCreateSessionOnDestroy{ false };
+	int32 LastNumPublicConnections;
+	FString LastMathType;
 #pragma endregion
 
 

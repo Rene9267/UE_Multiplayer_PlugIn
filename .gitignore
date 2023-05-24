@@ -47,7 +47,7 @@ SourceArt/**/*.tga
 
 # Binary Files
 MPTesting/Binaries
-Plugins/*/Binaries/*
+MPTesting/Plugins/MultiplayerSession/Binaries/
 
 # Builds
 MPTesting/Build/
@@ -74,4 +74,4 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-MPTesting/Binaries/Win64/UnrealEditor-MPTesting.pdb
+*.pdb

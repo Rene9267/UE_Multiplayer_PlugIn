@@ -103,6 +103,7 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString(TEXT("FAIL TO CREATE")));
 		}
+		HostButton->SetIsEnabled(true);
 	}
 }
 
@@ -134,6 +135,11 @@ void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& S
 			return;
 		}
 	}
+
+	if (!bWasSuccesful || SessionResult.Num() == 0)
+	{
+		JoinButton->SetIsEnabled(true);
+	}
 }
 
 void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
@@ -160,6 +166,13 @@ void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
 			}
 		}
 	}
+
+	//this can happen if someone is exiting the session and not still destroyed properly
+	if (Reuslt != EOnJoinSessionCompleteResult::Success)
+	{
+		JoinButton->SetIsEnabled(true);
+	}
+
 }
 
 void UMultiplayerMenu::OnDestroySession(bool bWasSuccesful)
@@ -172,6 +185,9 @@ void UMultiplayerMenu::OnStartSession(bool bWasSuccesful)
 
 void UMultiplayerMenu::HostButtonClicked()
 {
+	//disable button
+	HostButton->SetIsEnabled(false);
+
 	//Call MultiplayerSessionSubsystem Functions
 	if (MultiplayerSessionSubsystem)
 	{
@@ -181,6 +197,9 @@ void UMultiplayerMenu::HostButtonClicked()
 
 void UMultiplayerMenu::JoinButtonClicked()
 {
+	//disable button
+	JoinButton->SetIsEnabled(false);
+
 	if (MultiplayerSessionSubsystem)
 	{
 		MultiplayerSessionSubsystem->FindSession(/*MaxSessionResult*/10000);
