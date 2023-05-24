@@ -86,6 +86,7 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 {
 	if (bWasSuccesful)
 	{
+		//"Session Created Successfully" Debug
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Session Created Successfully")));
@@ -99,9 +100,10 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 	}
 	else
 	{
+		//"Fail To create Session" Debug
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString(TEXT("FAIL TO CREATE")));
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString(TEXT("Fail To create Session")));
 		}
 		HostButton->SetIsEnabled(true);
 	}
@@ -111,9 +113,10 @@ void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& S
 {
 	if (MultiplayerSessionSubsystem == nullptr)
 	{
+		//"MultiplayerSessionSubsystem Null" Debug
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("MultiplayerSessionSubsystem Null")));
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString(TEXT("MultiplayerSessionSubsystem Null")));
 		}
 		return;
 	}
@@ -122,6 +125,7 @@ void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& S
 	{
 		FString ID = Result.GetSessionIdStr();
 		FString User = Result.Session.OwningUserName;
+		//Print all Session Found
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, FString::Printf(TEXT("ID: %s, User: %s"), *ID, *User));
@@ -150,7 +154,7 @@ void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Travelling")));
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Travelling to Lobby")));
 		}
 		IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 		if (SessionInterface.IsValid())
