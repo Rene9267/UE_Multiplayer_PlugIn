@@ -57,9 +57,10 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerMenu() {}
 	{
 		P_GET_PROPERTY(FIntProperty,Z_Param_NumConnections);
 		P_GET_PROPERTY(FStrProperty,Z_Param_TypeOfMatch);
+		P_GET_PROPERTY(FStrProperty,Z_Param_LobbyPath);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		P_THIS->MenuSetUp(Z_Param_NumConnections,Z_Param_TypeOfMatch);
+		P_THIS->MenuSetUp(Z_Param_NumConnections,Z_Param_TypeOfMatch,Z_Param_LobbyPath);
 		P_NATIVE_END;
 	}
 	void UMultiplayerMenu::StaticRegisterNativesUMultiplayerMenu()
@@ -127,9 +128,11 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerMenu() {}
 		{
 			int32 NumConnections;
 			FString TypeOfMatch;
+			FString LobbyPath;
 		};
 		static const UECodeGen_Private::FIntPropertyParams NewProp_NumConnections;
 		static const UECodeGen_Private::FStrPropertyParams NewProp_TypeOfMatch;
+		static const UECodeGen_Private::FStrPropertyParams NewProp_LobbyPath;
 		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -138,12 +141,15 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerMenu() {}
 	};
 	const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_NumConnections = { "NumConnections", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(MultiplayerMenu_eventMenuSetUp_Parms, NumConnections), METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_TypeOfMatch = { "TypeOfMatch", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(MultiplayerMenu_eventMenuSetUp_Parms, TypeOfMatch), METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_LobbyPath = { "LobbyPath", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(MultiplayerMenu_eventMenuSetUp_Parms, LobbyPath), METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::PropPointers[] = {
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_NumConnections,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_TypeOfMatch,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::NewProp_LobbyPath,
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp_Statics::Function_MetaDataParams[] = {
+		{ "CPP_Default_LobbyPath", "/Game/ThirdPerson/Maps/LobbyMap" },
 		{ "CPP_Default_NumConnections", "4" },
 		{ "CPP_Default_TypeOfMatch", "FreeForAll" },
 		{ "ModuleRelativePath", "Public/MultiplayerMenu.h" },
@@ -303,7 +309,7 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerMenu() {}
 	const FClassFunctionLinkInfo Z_Construct_UClass_UMultiplayerMenu_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UMultiplayerMenu_HostButtonClicked, "HostButtonClicked" }, // 1074951185
 		{ &Z_Construct_UFunction_UMultiplayerMenu_JoinButtonClicked, "JoinButtonClicked" }, // 9383732
-		{ &Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp, "MenuSetUp" }, // 3220147905
+		{ &Z_Construct_UFunction_UMultiplayerMenu_MenuSetUp, "MenuSetUp" }, // 480742034
 		{ &Z_Construct_UFunction_UMultiplayerMenu_OnCreateSession, "OnCreateSession" }, // 3241903352
 		{ &Z_Construct_UFunction_UMultiplayerMenu_OnDestroySession, "OnDestroySession" }, // 1778761961
 		{ &Z_Construct_UFunction_UMultiplayerMenu_OnStartSession, "OnStartSession" }, // 792647564
@@ -374,9 +380,9 @@ void EmptyLinkFunctionForGeneratedCodeMultiplayerMenu() {}
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_UMultiplayerMenu, UMultiplayerMenu::StaticClass, TEXT("UMultiplayerMenu"), &Z_Registration_Info_UClass_UMultiplayerMenu, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UMultiplayerMenu), 3757951197U) },
+		{ Z_Construct_UClass_UMultiplayerMenu, UMultiplayerMenu::StaticClass, TEXT("UMultiplayerMenu"), &Z_Registration_Info_UClass_UMultiplayerMenu, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UMultiplayerMenu), 80448565U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_736099936(TEXT("/Script/MultiplayerSession"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_3439996939(TEXT("/Script/MultiplayerSession"),
 		Z_CompiledInDeferFile_FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_Rene_Desktop_UE_Multiplayer_PlugIn_MPTesting_Plugins_MultiplayerSession_Source_MultiplayerSession_Public_MultiplayerMenu_h_Statics::ClassInfo),
 		nullptr, 0,
 		nullptr, 0);

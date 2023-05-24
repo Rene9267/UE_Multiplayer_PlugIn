@@ -28,16 +28,17 @@ private:
 	class UMultiplayerSessionSubsystem* MultiplayerSessionSubsystem;
 
 	int32 NumConnection{ 4 };
-	FString MatchType{ TEXT("FreeForAll") };
-	FString LobbyPath{ TEXT("/Game/ThirdPerson/Maps/LobbyMap?listen") };
 	int32 MaxSessionResult{ 10000 };	//Better use a very hight value
+
+	FString MatchType{ TEXT("FreeForAll") };
+	FString PathToLobby{ TEXT("") };
 #pragma endregion
 
 
 #pragma region Functions
 public:
 	UFUNCTION(BlueprintCallable)
-		void MenuSetUp(int32 NumConnections = 4, FString TypeOfMatch = FString(TEXT("FreeForAll"))); //for setting visibility or things like that
+		void MenuSetUp(int32 NumConnections = 4, FString TypeOfMatch = FString(TEXT("FreeForAll")), FString LobbyPath = FString(TEXT("/Game/ThirdPerson/Maps/LobbyMap"))); //for setting visibility or things like that
 
 protected:
 	//we'll bind the button callback on this fuction

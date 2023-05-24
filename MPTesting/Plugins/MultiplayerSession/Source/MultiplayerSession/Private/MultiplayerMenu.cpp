@@ -8,8 +8,9 @@
 
 
 
-void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch)
+void UMultiplayerMenu::MenuSetUp(int32 NumConnections, FString TypeOfMatch, FString LobbyPath)
 {
+	this->PathToLobby = FString::Printf(TEXT("%s?Listen"), *LobbyPath);
 	NumConnection = NumConnections;
 	MatchType = TypeOfMatch;
 
@@ -93,7 +94,7 @@ void UMultiplayerMenu::OnCreateSession(bool bWasSuccesful)
 		UWorld* World = GetWorld();
 		if (World)
 		{
-			World->ServerTravel(LobbyPath);
+			World->ServerTravel(PathToLobby);
 		}
 	}
 	else
