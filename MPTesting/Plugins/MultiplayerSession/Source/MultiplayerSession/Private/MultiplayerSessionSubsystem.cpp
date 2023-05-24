@@ -34,7 +34,7 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("ExistsingSession no exist")));
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Can't Create Session")));
 		}
 		SessionInterface->DestroySession(NAME_GameSession);
 	}
@@ -52,7 +52,8 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	LastSessionSettings->bShouldAdvertise = true;						//allows steam to advertise so other player can find and join
 	LastSessionSettings->bUsesPresence = true;							//find session going on in our region of the world
 	LastSessionSettings->bUseLobbiesIfAvailable = true;
-
+	LastSessionSettings->BuildUniqueId = 1;								//We can have multiple user launching their own builds and hosting otherwise we'll join in the first one session hosted
+	
 	//usefull for chech the type when join. so we'r sure to join only in sessions with the correct match type
 	LastSessionSettings->Set(FName("MatchType"), FString("FreeForAll")/*MatchType*/, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
@@ -77,7 +78,7 @@ void UMultiplayerSessionSubsystem::FindSession(int32 MaxSearchResults)
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SessionInterface Not")));
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Find Session -> Session Interface Not Valid")));
 		}
 		return;
 	}

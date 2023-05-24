@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MultiplayerSession.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Intermediate\Build\Win64\MPTestingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\Module.MultiplayerSession.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\MultiplayerMenu.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\MultiplayerSessionSubsystem.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\MultiplayerMenu.gen.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\MultiplayerSession.init.gen.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\MultiplayerSessionSubsystem.gen.cpp.obj"
+"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\Default.rc2.res"
+/OUT:"C:\Users\Rene\Desktop\UE_Multiplayer_PlugIn\MPTesting\Plugins\MultiplayerSession\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerSession\UnrealEditor-MultiplayerSession.lib"

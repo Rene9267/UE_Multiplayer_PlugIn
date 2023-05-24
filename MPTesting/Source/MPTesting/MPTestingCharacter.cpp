@@ -65,11 +65,11 @@ AMPTestingCharacter::AMPTestingCharacter() :
 		//access th session interface
 		OnlineSssionInterface = OnlineSubsystem->GetSessionInterface();
 
-		if (GEngine)
-		{
-			//print a screen message for onlyne subystm information
-			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Found Subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
-		}
+		//if (GEngine)
+		//{
+		//	//print a screen message for onlyne subystm information
+		//	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Found Subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
+		//}
 	}
 }
 
