@@ -32,6 +32,10 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	FNamedOnlineSession* ExistsingSession = SessionInterface->GetNamedSession(NAME_GameSession);
 	if (ExistsingSession != nullptr)
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("ExistsingSession no exist")));
+		}
 		SessionInterface->DestroySession(NAME_GameSession);
 	}
 #pragma endregion
@@ -41,7 +45,7 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 
 	LastSessionSettings = MakeShareable(new FOnlineSessionSettings());
 	//check if is a null subsystem or not
-	LastSessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName().Compare(TEXT("NULL")) ? true : false; // this'll return null if we'r useing null subsystem or steam if we'r using steam subsystem
+	LastSessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false; // this'll return null if we'r useing null subsystem or steam if we'r using steam subsystem
 	LastSessionSettings->NumPublicConnections = NumPublicConnections;	//number player that can connect
 	LastSessionSettings->bAllowJoinInProgress = true;					//if session is running other player can join 
 	LastSessionSettings->bAllowJoinViaPresence = true;					//search from region player
@@ -50,12 +54,16 @@ void UMultiplayerSessionSubsystem::CreateSession(int32 NumPublicConnections, FSt
 	LastSessionSettings->bUseLobbiesIfAvailable = true;
 
 	//usefull for chech the type when join. so we'r sure to join only in sessions with the correct match type
-	LastSessionSettings->Set(FName("MatchType"), MatchType, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	LastSessionSettings->Set(FName("MatchType"), FString("FreeForAll")/*MatchType*/, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 	//if the creation of the session didnt work if good to unbind the delegate
 	if (!SessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *LastSessionSettings))
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SessionInterface Can't create session")));
+		}
 		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
 
 		//Broadcast our own custom delegate for the fail
@@ -67,6 +75,10 @@ void UMultiplayerSessionSubsystem::FindSession(int32 MaxSearchResults)
 {
 	if (!SessionInterface.IsValid())
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SessionInterface Not")));
+		}
 		return;
 	}
 
@@ -74,15 +86,21 @@ void UMultiplayerSessionSubsystem::FindSession(int32 MaxSearchResults)
 
 	//create a pointer we use a shared pointer and not a ref because we plan on making there varibales on this class to access information
 	LastSessionSearch = MakeShareable(new FOnlineSessionSearch());
-	LastSessionSearch->MaxSearchResults = MaxSearchResults;		//hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
-	LastSessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName().Compare(TEXT("NULL")) ? true : false;		// for lan using
+	LastSessionSearch->MaxSearchResults = 10000/*MaxSearchResults*/;		//hight number because we'r using the open steam ID 480 so there'll be a lot of possibile session
+	LastSessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;		// for lan using
 	LastSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals); //query to use for finding matching servers
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the net id
 	//if the creation of the session didnt work if good to unbind the delegate
+
 	if (!SessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), LastSessionSearch.ToSharedRef()))
 	{
+
 		SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegateHandle);
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Join found Not Found")));
+		}
 
 		//faliure case, send an empty array
 		MultiplayerOnFindSessionComplete.Broadcast(TArray<FOnlineSessionSearchResult>(), false);
@@ -93,6 +111,10 @@ void UMultiplayerSessionSubsystem::JoinSession(const FOnlineSessionSearchResult&
 {
 	if (!SessionInterface.IsValid())
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SessionInterface Not Valid")));
+		}
 		//send error in case we can't join
 		MultiplayerOnJoinSessionComplete.Broadcast(EOnJoinSessionCompleteResult::UnknownError);
 		return;
@@ -103,6 +125,10 @@ void UMultiplayerSessionSubsystem::JoinSession(const FOnlineSessionSearchResult&
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController(); // for get the controller
 	if (!SessionInterface->JoinSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, SessionResult))
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SessionInterface Can't Join")));
+		}
 		SessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegateHandle);
 		MultiplayerOnJoinSessionComplete.Broadcast(EOnJoinSessionCompleteResult::UnknownError);
 	}
@@ -132,12 +158,20 @@ void UMultiplayerSessionSubsystem::OnFindSessionComplete(bool bWasSuccessful)
 {
 	if (SessionInterface)
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("%d"), LastSessionSearch->SearchResults.Num()));
+		}
 		SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegateHandle);
 	}
 
 	//in case the array is empty
 	if (LastSessionSearch->SearchResults.Num() <= 0)
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("SearchResults Null")));
+		}
 		MultiplayerOnFindSessionComplete.Broadcast(TArray<FOnlineSessionSearchResult>(), false);
 		return;
 	}
@@ -153,7 +187,6 @@ void UMultiplayerSessionSubsystem::OnJoinSessionComplete(FName SessionName, EOnJ
 		SessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegateHandle);
 	}
 	MultiplayerOnJoinSessionComplete.Broadcast(Result);
-
 }
 
 void UMultiplayerSessionSubsystem::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)

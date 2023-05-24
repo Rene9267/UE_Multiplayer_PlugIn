@@ -109,14 +109,24 @@ void UMultiplayerMenu::OnFindSession(const TArray<FOnlineSessionSearchResult>& S
 {
 	if (MultiplayerSessionSubsystem == nullptr)
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("MultiplayerSessionSubsystem Null")));
+		}
 		return;
 	}
 	//check trow the array if there is a valid session
 	for (FOnlineSessionSearchResult Result : SessionResult)
 	{
+		FString ID = Result.GetSessionIdStr();
+		FString User = Result.Session.OwningUserName;
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, FString::Printf(TEXT("ID: %s, User: %s"), *ID, *User));
+		}
 		FString MatchSettingValue;
 		Result.Session.SessionSettings.Get(FName("MatchType"), MatchSettingValue); //if the session have the correct FName he'll set the Match Type value
-		if (MatchSettingValue.Compare(MatchType))
+		if (MatchSettingValue == MatchType)
 		{
 			//call join session for joining
 			MultiplayerSessionSubsystem->JoinSession(Result);
@@ -131,6 +141,10 @@ void UMultiplayerMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt)
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
 	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Yellow, FString(TEXT("Travelling")));
+		}
 		IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 		if (SessionInterface.IsValid())
 		{
@@ -168,7 +182,7 @@ void UMultiplayerMenu::JoinButtonClicked()
 {
 	if (MultiplayerSessionSubsystem)
 	{
-		MultiplayerSessionSubsystem->FindSession(MaxSessionResult);
+		MultiplayerSessionSubsystem->FindSession(/*MaxSessionResult*/10000);
 	}
 }
 
