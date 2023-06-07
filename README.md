@@ -6,7 +6,6 @@
     - Host a server using the Steam Platform, with the possibility of choosing the quantity of entity who can access.
     - Join a compatible server, in your same region using **Presence**. [https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/Online/PresenceInterface/]
     
- 
 ***Steam must be open for the plugin to work!*** 
 
 ## Multiplayer Plugin API
@@ -15,22 +14,15 @@
     - *Multiplayer session Subsystem internal delegate and custom delegate for MultiplayerMenu Class.*
     - *Session Functionality (Create, Find, Join, etc..) called by MultiplayerMenu.*
     
-    <details>
-	<summary>  Multiplayer Session Subsystem Implementation </summary>
-	</details>
-
-  - MultiplayerSession.h/cpp 
-    - Start up and ShutDown Module.
-  - MultiplayerMenu.h/cpp 
-    - Manages the calling of the various functions of the Multiplayer Session Subsystem
- 
-
-
+<details><summary>  Multiplayer Session Subsystem Implementation </summary><blockquote>
+	
 ## Multiplayer Session Subsystem
 ```C++
 UCLASS()
 class MULTIPLAYERSESSION_API UMultiplayerSessionSubsystem : public UGameInstanceSubsystem
 ```
+<details><summary>  Include </summary><blockquote>
+
 ### Include
 ```C++
 //.h inclue
@@ -44,9 +36,10 @@ class MULTIPLAYERSESSION_API UMultiplayerSessionSubsystem : public UGameInstance
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 ```
-<details>
-	<summary>  Constructor </summary>
-	
+
+</blockquote></details>
+<details><summary>  Constructor </summary><blockquote>
+
 
 ### Constructor
 ```C++
@@ -67,7 +60,9 @@ UMultiplayerSessionSubsystem::UMultiplayerSessionSubsystem() :
 ```
 - Bind the various delegates
 - Set up the Session Interface
+
 </details>
+<details><summary>  Public Members </summary><blockquote>
 
 
 ### Public Members
@@ -134,9 +129,9 @@ void StartSession();
 - Not yet implemented
 - Teorically called inside OnCreateSessionComplete().
 
-
-
-
+</blockquote></details>	
+<details><summary>  Protected Members </summary><blockquote>	
+	
 ### Protected Members
 Internal callbacks for the delegate we'll add to the online session interface delegate list, don't need to be called outside this class.
 	
@@ -177,9 +172,8 @@ void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 ```
 - Not yet implemented
 
-
-
-
+</blockquote></details>
+<details><summary>  Private Members </summary><blockquote>	
 
 ### Private Members 
 
@@ -206,4 +200,13 @@ void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 	FOnStartSessionCompleteDelegate StartSessionCompleteDelegate;
 	FDelegateHandle StartSessionCompleteDelegateHandle;
 	```
-	
+
+</blockquote></details>	
+</blockquote></details>
+
+  - MultiplayerSession.h/cpp 
+    - Start up and ShutDown Module.
+  - MultiplayerMenu.h/cpp 
+    - Manages the calling of the various functions of the Multiplayer Session Subsystem
+ 
+
