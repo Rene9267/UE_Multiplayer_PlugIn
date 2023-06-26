@@ -126,8 +126,8 @@ void DestroySession();
 ```
 void StartSession();
 ```
-- Not yet implemented
-- Teorically called inside OnCreateSessionComplete().
+- No default implementation
+- Called inside OnCreateSessionComplete().
 
 </blockquote></details>	
 <details><summary>  Protected Members </summary><blockquote>	
@@ -170,8 +170,8 @@ void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 ```C++
 void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 ```
-- Not yet implemented
-
+- No default implementation
+--------------------------------------
 </blockquote></details>
 <details><summary>  Private Members </summary><blockquote>	
 
@@ -208,5 +208,153 @@ void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
     - Start up and ShutDown Module.
   - MultiplayerMenu.h/cpp 
     - Manages the calling of the various functions of the Multiplayer Session Subsystem
- 
 
+<details><summary>  Multiplayer Menu Implementation </summary><blockquote>
+	
+ ## Multiplayer Menu
+```C++
+UCLASS()
+class MULTIPLAYERSESSION_API UMultiplayerMenu : public UUserWidget
+```
+<details><summary>  Include </summary><blockquote>
+
+### Include
+```C++
+//.h inclue
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "OnlineSessionSettings.h"
+#include "Interfaces/OnlineSessionInterface.h"
+#include "MultiplayerMenu.generated.h"
+
+//.cpp include
+#include "MultiplayerMenu.h"
+#include "Components/Button.h"
+#include "MultiplayerSessionSubsystem.h"
+#include "OnlineSubsystem.h"
+```
+</blockquote></details>
+<details><summary>  Public Members </summary><blockquote>
+### Public Members
+--------------------------------------
+***Menu Set Up Method***
+```C++
+UFUNCTION(BlueprintCallable)
+		void MenuSetUp(int32 NumConnections = 4, FString TypeOfMatch = FString(TEXT("FreeForAll")), FString LobbyPath = FString(TEXT("/Game/ThirdPerson/Maps/LobbyMap"))); 
+```
+- Parameters:
+  - int32 NumConnections = Number of players that can connect.
+  - FString TypeOfMatch = Set the MetchType so we'r sure to join only in the sessions we are interested in, in this case is "FreeForAll"
+  - FString LobbyPath = set the path to the lobby Map
+- Call this in the level Blueprint of the first loaded Map
+- Add the Menu widget to the viewport and set the input mode on UI
+- Access the Game instance for setting the MultiplayerSessionSubsystem
+- Bind the callbacks to the MultiplayerSessionSubsystem calls
+--------------------------------------
+</blockquote></details>
+<details><summary>  Protected Members </summary><blockquote>	
+
+### Protected Members 
+--------------------------------------
+***Initialize Method***
+```C++
+virtual bool Initialize() override;
+```
+- Bind the custom Host button function to the delegate event HostButtonClicked using AddDynamic
+- bind the custom Join button function to the delegate event JoinButtonClicked using AddDynamic
+--------------------------------------
+***NativeDestruct Method***
+```C++
+virtual void NativeDestruct() override;
+```
+- Called by the user widget when travel to another Level
+- Inside we call the Menu Tear Down for add again input to the player
+--------------------------------------
+***On Create Session Method***
+```C++
+UFUNCTION();
+void OnCreateSession(bool bWasSuccesful);
+```
+- Parameters
+  - bool bWasSuccesful = true if succesfuly create the session
+- Callback for the castom delegate called on the Multiplayer Session Subsystem ```MultiplayerOnCreateSessionComplete```
+- Handle the Server travel to the lobby path
+--------------------------------------
+***On Destroy Session Method***
+```C++
+UFUNCTION();
+void OnDestroySession(bool bWasSuccesful);
+```
+- Parameters
+  - bool bWasSuccesful = true if succesfuly destroy the session
+- Called on ```MultiplayerOnDestroySessionComplete```
+- No default implementation
+--------------------------------------
+***On Start Session Method***
+```C++
+UFUNCTION();
+void OnStartSession(bool bWasSuccesful);
+```
+- Parameters
+  - bool bWasSuccesful = true if succesfuly start the session
+- Called on ```MultiplayerOnStartSessionComplete```
+- No default implementation
+--------------------------------------
+***On Find Session Method***
+```C++
+void OnFindSession(const TArray<FOnlineSessionSearchResult>& SessionResult, bool bWasSuccesful);
+```
+- Parameters:
+  - const TArray<FOnlineSessionSearchResult>& SessionResult = array sessions found.
+  - bool bWasSuccesful.
+- Called on ```MultiplayerOnFindSessionComplete```.
+- Check if there is a valis session in the array based on "MatchType".
+- If found call ```MultiplayerSessionSubsystem->JoinSession(Result);``` for the travel.
+--------------------------------------
+***On Join Session Method***
+```C++
+void OnJoinSession(EOnJoinSessionCompleteResult::Type Reuslt);
+```
+- Parameters:
+  - EOnJoinSessionCompleteResult::Type Reuslt = enum that let you know the state of the joining process
+- Get the IP Address and the Player controller (from the game instance) and call Client Travel
+--------------------------------------
+</blockquote></details>
+<details><summary>  Private Members </summary><blockquote>	
+	
+### Private Members 
+--------------------------------------
+***Host Button Clicked Method***
+```C++
+UFUNCTION();
+void HostButtonClicked();
+```
+- When Host button is clicked call ```MultiplayerSessionSubsystem->CreateSession(NumConnection, MatchType);```
+--------------------------------------
+***Join Button Clicked Method***
+```C++
+UFUNCTION();
+void JoinButtonClicked();
+```
+- When Join button is clicked call ```MultiplayerSessionSubsystem->FindSession(MaxSessionResult);```
+--------------------------------------
+***Menu Tear Down Method***
+```C++
+void MenuTearDown();
+```
+- Add again input to the player
+- Called when we have to destroy the menu widget
+--------------------------------------
+***Variables***
+   
+- UPROPERTY(meta = (BindWidget)) class UButton* HostButton; = used for link the button widget to our button variable in c++ the variable has to have the exact same name of the button
+- UPROPERTY(meta = (BindWidget)) class UButton* JoinButton; = used for link the button widget to our button variable in c++ the variable has to have the exact same name of the button
+- class UMultiplayerSessionSubsystem* MultiplayerSessionSubsystem; = the susbsystem designed to handle all online session
+- int32 NumConnection{ 4 };
+- int32 MaxSessionResult{ 10000 };
+- FString MatchType{ TEXT("FreeForAll") };
+- FString PathToLobby{ TEXT("") };
+--------------------------------------
+
+</blockquote></details>
+</blockquote></details>
