@@ -10,6 +10,7 @@
 
 ## Multiplayer Plugin API
 
+--------------------------------------
   - MultiplayerSessionSubsystem.h/cpp
     - *Multiplayer session Subsystem internal delegate and custom delegate for MultiplayerMenu Class.*
     - *Session Functionality (Create, Find, Join, etc..) called by MultiplayerMenu.*
@@ -204,8 +205,11 @@ void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 </blockquote></details>	
 </blockquote></details>
 
+--------------------------------------
+
   - MultiplayerSession.h/cpp 
     - Start up and ShutDown Module.
+--------------------------------------
   - MultiplayerMenu.h/cpp 
     - Manages the calling of the various functions of the Multiplayer Session Subsystem
 
@@ -359,3 +363,5 @@ void MenuTearDown();
 
 </blockquote></details>
 </blockquote></details>
+
+--------------------------------------
