@@ -4,7 +4,7 @@
 ## Introduction
 - This Plugin allow the user to:
     - Host a server using the Steam Platform, with the possibility of choosing the quantity of entity who can access.
-    - Join a compatible server, in your same region using **Presence**. [https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/Online/PresenceInterface/]
+    - Join a compatible server, in your same region using [**Presence**](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/Online/PresenceInterface/). 
     
 ***Steam must be open for the plugin to work!*** 
 
