@@ -235,6 +235,7 @@ class MULTIPLAYERSESSION_API UMultiplayerMenu : public UUserWidget
 ```
 </blockquote></details>
 <details><summary>  Public Members </summary><blockquote>
+	
 ### Public Members
 --------------------------------------
 ***Menu Set Up Method***
